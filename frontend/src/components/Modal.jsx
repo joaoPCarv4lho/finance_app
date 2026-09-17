@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { X } from 'lucide-react'
 
 export default function Modal({ title, onClose, children }) {
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function Modal({ title, onClose, children }) {
         <div className="row-between">
           <h2>{title}</h2>
           <button className="icon-btn" onClick={onClose} aria-label="Fechar">
-            ✕
+            <X size={19} />
           </button>
         </div>
         {children}

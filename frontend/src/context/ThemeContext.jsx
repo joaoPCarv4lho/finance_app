@@ -4,7 +4,7 @@ const ThemeContext = createContext(null)
 const STORAGE_KEY = 'finance_theme'
 
 // Meta theme-color per mode (status bar / PWA chrome).
-const META_COLOR = { light: '#0f766e', dark: '#0f1614' }
+const META_COLOR = { light: '#059669', dark: '#0e1512' }
 
 function getInitialTheme() {
   try {

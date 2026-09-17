@@ -1,49 +1,60 @@
 :root {
-  --bg: #f1f5f4;
+  --bg: #f6f7f3;
   --surface: #ffffff;
-  --surface-2: #f8fafa;
-  --border: #e2e8e6;
-  --text: #14201d;
-  --text-muted: #64756f;
-  --primary: #0f766e;
-  --primary-dark: #0b5850;
-  --primary-soft: #d6efe9;
-  --income: #0f9d76;
-  --income-soft: #dcf5ec;
-  --expense: #dc5b4b;
-  --expense-soft: #fbe4e0;
-  --invest: #6d5bd0;
-  --invest-soft: #e8e3fb;
-  --warn: #d9822b;
-  --danger-text: #a83824;
-  --info-text: #0b5850;
-  --shadow: 0 1px 3px rgba(20, 32, 29, 0.06), 0 6px 20px rgba(20, 32, 29, 0.06);
-  --radius: 18px;
+  --surface-2: #f3f5f1;
+  --border: #e7e9e3;
+  --border-strong: #d8dcd4;
+  --text: #17211d;
+  --text-muted: #6a776f;
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --primary-soft: #d9f5e9;
+  --gold: #f59e0b;
+  --gold-dark: #b7791f;
+  --gold-soft: #fdf0d5;
+  --income: #10b981;
+  --income-soft: #d9f5e9;
+  --expense: #ef4d4d;
+  --expense-soft: #fce2e2;
+  --invest: #6366f1;
+  --invest-soft: #e5e6fd;
+  --warn: #f59e0b;
+  --danger-text: #b4322c;
+  --info-text: #047857;
+  --shadow: 0 1px 2px rgba(23, 33, 29, 0.04), 0 8px 24px rgba(23, 33, 29, 0.06);
+  --shadow-lg: 0 12px 34px rgba(5, 150, 105, 0.22);
+  --radius: 16px;
   --radius-sm: 12px;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, sans-serif;
 }
 
 /* Dark theme — activated by data-theme="dark" on <html> (see ThemeContext). */
 :root[data-theme='dark'] {
-  --bg: #0f1614;
-  --surface: #182420;
-  --surface-2: #202e29;
-  --border: #2c3d37;
-  --text: #e9efec;
-  --text-muted: #9bafa8;
-  --primary: #16a394;
-  --primary-dark: #0e8579;
-  --primary-soft: #123a35;
-  --income: #2bb98d;
-  --income-soft: #123a30;
-  --expense: #ef6b5b;
-  --expense-soft: #3a201c;
-  --invest: #9484e6;
-  --invest-soft: #262051;
-  --warn: #e5983f;
-  --danger-text: #f2a99d;
-  --info-text: #8fdccf;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.32), 0 6px 20px rgba(0, 0, 0, 0.28);
+  --bg: #0e1512;
+  --surface: #16201c;
+  --surface-2: #1d2823;
+  --border: #2a352f;
+  --border-strong: #37453d;
+  --text: #e9efeb;
+  --text-muted: #93a49b;
+  --primary: #34d399;
+  --primary-dark: #10b981;
+  --primary-soft: #123528;
+  --gold: #fbbf24;
+  --gold-dark: #f59e0b;
+  --gold-soft: #33280f;
+  --income: #34d399;
+  --income-soft: #123528;
+  --expense: #f87171;
+  --expense-soft: #3a201f;
+  --invest: #8b8cf7;
+  --invest-soft: #23234d;
+  --warn: #fbbf24;
+  --danger-text: #f6b0a8;
+  --info-text: #6ee7b7;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 12px 34px rgba(0, 0, 0, 0.45);
 }
 
 /* Smooth transition when toggling themes. */
@@ -548,3 +559,258 @@ a {
 .row-between { display: flex; justify-content: space-between; align-items: center; }
 .mt-8 { margin-top: 8px; }
 .mt-16 { margin-top: 16px; }
+
+/* =====================================================================
+   Redesign — "Aconchego com disciplina"
+   Emerald + amber, hairline borders, Plus Jakarta Sans, tabular money.
+   ===================================================================== */
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Lucide icon sizing (stroke inherits currentColor) */
+.icon-btn svg { width: 20px; height: 20px; }
+.nav-item svg { width: 23px; height: 23px; }
+.nav-item.add svg { width: 26px; height: 26px; }
+.section-title a svg { width: 15px; height: 15px; }
+
+/* Hairline cards by default in the redesign */
+.card {
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.icon-btn { border: 1px solid var(--border); box-shadow: none; }
+.topbar h1 { font-weight: 800; letter-spacing: -0.03em; }
+
+/* ---------- Spending-ceiling gauge (hero) ---------- */
+.gauge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 20px 20px 16px;
+}
+.gauge-wrap {
+  position: relative;
+  width: 236px;
+  max-width: 80%;
+  margin: 2px auto 0;
+}
+.gauge-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gauge-track { stroke: var(--surface-2); }
+.gauge-fill { transition: stroke-dasharray 0.85s cubic-bezier(0.22, 1, 0.36, 1); }
+.gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 8%;
+}
+.gauge-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.gauge-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin-top: 3px;
+}
+.gauge-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 5px; max-width: 130px; }
+.gauge-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+.gauge-foot .lbl { color: var(--text-muted); }
+.gauge-foot .val { font-weight: 700; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.chip.ok { background: var(--primary-soft); color: var(--primary-dark); }
+.chip.warn { background: var(--gold-soft); color: var(--gold-dark); }
+.chip.over { background: var(--expense-soft); color: var(--danger-text); }
+
+/* ---------- Summary metric trio ---------- */
+.stats-row { gap: 9px; }
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  border-radius: 14px;
+  padding: 13px 12px 14px;
+  text-align: left;
+}
+.stat .stat-ic {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+}
+.stat .stat-ic svg { width: 17px; height: 17px; }
+.stat.income .stat-ic { background: var(--income-soft); color: var(--income); }
+.stat.expense .stat-ic { background: var(--expense-soft); color: var(--expense); }
+.stat.invest .stat-ic { background: var(--invest-soft); color: var(--invest); }
+.stat .stat-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 9px;
+}
+.stat .stat-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin-top: 1px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* ---------- Category breakdown (top-3 expenses) ---------- */
+.cat-list { display: flex; flex-direction: column; gap: 13px; }
+.cat-row { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; }
+.cat-emoji { font-size: 1.1rem; text-align: center; }
+.cat-name { font-size: 0.84rem; font-weight: 600; }
+.cat-bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  margin-top: 6px;
+  overflow: hidden;
+}
+.cat-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--expense);
+  opacity: 0.85;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cat-amt { font-size: 0.84rem; font-weight: 700; letter-spacing: -0.01em; }
+
+/* ---------- Goals ---------- */
+.progress { height: 9px; border: none; background: var(--surface-2); }
+.progress span { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
+.goal-pct { color: var(--primary-dark); }
+.goal-card.complete {
+  border-color: var(--gold);
+  background: linear-gradient(150deg, var(--gold-soft), var(--surface) 65%);
+}
+.goal-card.complete .progress span { background: linear-gradient(90deg, var(--gold), var(--gold-dark)); }
+.goal-done-badge { background: var(--gold-soft); color: var(--gold-dark); }
+
+/* ---------- Onboarding (no income yet) ---------- */
+.onboard {
+  background: linear-gradient(150deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border-radius: 20px;
+  padding: 24px 22px;
+  box-shadow: var(--shadow-lg);
+}
+.onboard .oy-ic {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+.onboard h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+.onboard p { font-size: 0.86rem; opacity: 0.92; margin-top: 4px; }
+.onboard .btn {
+  background: #fff;
+  color: var(--primary-dark);
+  margin-top: 16px;
+}
+
+/* ---------- Empty state (redesigned) ---------- */
+.empty .empty-ic {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+}
+
+/* Section/card titles with a leading icon */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.card-title svg { color: var(--primary); }
+
+/* Profile avatar */
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  display: grid;
+  place-items: center;
+}
+
+/* Auth brand badge */
+.brand-badge {
+  width: 66px;
+  height: 66px;
+  border-radius: 19px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  font-size: 2.1rem;
+  margin: 0 auto 14px;
+}
+
+/* Goal completion badge (gold, with trophy) */
+.goal-done-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* "Tudo" filter (no data-type) active state */
+.type-toggle button.active[data-type=''] {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

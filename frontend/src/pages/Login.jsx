@@ -24,7 +24,7 @@ export default function Login() {
   return (
     <div className="auth-wrap">
       <div className="auth-logo">
-        <div className="emoji">💰</div>
+        <div className="brand-badge">💰</div>
         <h1>Meu Bolso</h1>
         <p>Gaste com segurança, invista com confiança.</p>
       </div>

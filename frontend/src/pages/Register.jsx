@@ -41,7 +41,7 @@ export default function Register() {
   return (
     <div className="auth-wrap">
       <div className="auth-logo">
-        <div className="emoji">💰</div>
+        <div className="brand-badge">💰</div>
         <h1>Criar conta</h1>
         <p>Comece a organizar sua vida financeira hoje.</p>
       </div>
