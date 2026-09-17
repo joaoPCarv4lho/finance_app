@@ -74,6 +74,35 @@ async def test_goal_with_target_date_computes_infeasible_plan(client: AsyncClien
     assert float(body["savings_shortfall"]) > 0
 
 
+def _add_months(d: date, months: int) -> date:
+    month_index = d.month - 1 + months
+    year = d.year + month_index // 12
+    month = month_index % 12 + 1
+    return date(year, month, 1)
+
+
+async def test_list_goals_includes_savings_plan_fields(client: AsyncClient):
+    headers = await _register(client, "lista_metas@example.com", "3000.00")
+
+    target_date = _add_months(date.today().replace(day=1), 3).isoformat()
+    create_resp = await client.post(
+        "/api/v1/goals",
+        json={"name": "Reserva", "target_amount": "1200.00", "target_date": target_date},
+        headers=headers,
+    )
+    assert create_resp.status_code == 201
+
+    list_resp = await client.get("/api/v1/goals", headers=headers)
+    assert list_resp.status_code == 200
+    body = list_resp.json()
+
+    assert len(body) == 1
+    goal = body[0]
+    assert float(goal["monthly_amount_needed"]) == 400.00
+    assert goal["months_remaining"] == 3
+    assert goal["is_feasible"] is True
+
+
 async def test_updating_fixed_expenses_changes_goal_plan_on_next_fetch(client: AsyncClient):
     headers = await _register(client, "atualiza@example.com", "2000.00")
     target_date = (date.today() + timedelta(days=30)).isoformat()

@@ -43,7 +43,7 @@ class FixedExpenseService:
     async def update(
         db: AsyncSession, expense: FixedExpense, data: FixedExpenseUpdate
     ) -> FixedExpense:
-        for field, value in data.model_dump(exclude_unset=True).items():
+        for field, value in data.model_dump(exclude_unset=True, exclude_none=True).items():
             setattr(expense, field, value)
         await db.commit()
         await db.refresh(expense)

@@ -16,6 +16,7 @@ const TITLES = {
   '/': null,
   '/transactions': 'Extrato',
   '/goals': 'Minhas Metas',
+  '/gastos-fixos': 'Gastos Fixos',
   '/settings': 'Perfil',
 }
 

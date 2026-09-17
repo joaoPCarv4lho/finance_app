@@ -35,6 +35,29 @@ async def test_create_list_update_delete_fixed_expense(
     assert final_list.json() == []
 
 
+async def test_create_fixed_expense_rejects_amount_exceeding_precision(
+    client: AsyncClient, auth_headers: dict[str, str]
+):
+    resp = await client.post(
+        "/api/v1/fixed-expenses",
+        json={"name": "Teste", "amount": "1e100"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 422
+
+
+async def test_create_fixed_expense_accepts_valid_amount(
+    client: AsyncClient, auth_headers: dict[str, str]
+):
+    resp = await client.post(
+        "/api/v1/fixed-expenses",
+        json={"name": "Teste", "amount": "1200.50"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 201
+    assert float(resp.json()["amount"]) == 1200.5
+
+
 async def test_cannot_modify_another_users_fixed_expense(client: AsyncClient):
     resp_a = await client.post(
         "/api/v1/auth/register",

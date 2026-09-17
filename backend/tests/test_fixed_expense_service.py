@@ -46,6 +46,27 @@ async def test_update_changes_only_given_fields(db_session: AsyncSession):
     assert updated.amount == Decimal("55.00")
 
 
+async def test_update_with_explicit_none_name_keeps_original_and_updates_amount(
+    db_session: AsyncSession,
+):
+    user = await _make_user(db_session)
+    expense = await FixedExpenseService.create(
+        db_session, user.id, FixedExpenseCreate(name="Streaming", amount=Decimal("40.00"))
+    )
+
+    # Simula um payload que tecnicamente enviou "name": null, mas cujo objetivo
+    # era atualizar apenas o amount. exclude_none=True deve impedir que o
+    # setattr grave None na coluna NOT NULL `name`.
+    updated = await FixedExpenseService.update(
+        db_session,
+        expense,
+        FixedExpenseUpdate(name=None, amount=Decimal("50.00")),
+    )
+
+    assert updated.name == "Streaming"
+    assert updated.amount == Decimal("50.00")
+
+
 async def test_delete_removes_expense(db_session: AsyncSession):
     user = await _make_user(db_session)
     expense = await FixedExpenseService.create(
