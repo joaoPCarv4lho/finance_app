@@ -1,4 +1,15 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  Wallet,
+  Palette,
+  User,
+  LogOut,
+  Sun,
+  Moon,
+  PieChart,
+  Pencil,
+} from 'lucide-react'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
@@ -47,12 +58,12 @@ export default function Settings() {
             <div className="goal-name">{user?.username}</div>
             <div className="muted" style={{ fontSize: '0.85rem' }}>{user?.email}</div>
           </div>
-          <div style={{ fontSize: '2rem' }}>👤</div>
+          <div className="avatar"><User size={24} /></div>
         </div>
       </div>
 
       <form onSubmit={save} className="card mt-16">
-        <h2 style={{ fontSize: '1rem', marginBottom: 14 }}>💵 Renda & Orçamento</h2>
+        <h2 className="card-title"><Wallet size={18} /> Renda &amp; Orçamento</h2>
         {msg && <div className="alert info">{msg}</div>}
         {error && <div className="alert">{error}</div>}
 
@@ -77,7 +88,7 @@ export default function Settings() {
               className={mode === 'RULE_50_30_20' ? 'active' : ''}
               onClick={() => setMode('RULE_50_30_20')}
             >
-              📊 Regra 50/30/20
+              <PieChart size={17} /> Regra 50/30/20
             </button>
             <button
               type="button"
@@ -85,7 +96,7 @@ export default function Settings() {
               className={mode === 'FREE' ? 'active' : ''}
               onClick={() => setMode('FREE')}
             >
-              ✏️ Orçamento livre
+              <Pencil size={16} /> Orçamento livre
             </button>
           </div>
         </div>
@@ -116,7 +127,23 @@ export default function Settings() {
       </form>
 
       <div className="card mt-16">
-        <h2 style={{ fontSize: '1rem', marginBottom: 14 }}>🎨 Aparência</h2>
+        <div className="row-between">
+          <div>
+            <h2 className="card-title" style={{ marginBottom: 2 }}>
+              <Wallet size={18} /> Gastos fixos
+            </h2>
+            <div className="muted" style={{ fontSize: '0.85rem' }}>
+              Aluguel, internet, streaming e outras contas mensais.
+            </div>
+          </div>
+          <Link className="btn small secondary" to="/gastos-fixos">
+            Gerenciar
+          </Link>
+        </div>
+      </div>
+
+      <div className="card mt-16">
+        <h2 className="card-title"><Palette size={18} /> Aparência</h2>
         <div className="field" style={{ marginBottom: 0 }}>
           <label>Tema do app</label>
           <div className="type-toggle" style={{ gridTemplateColumns: '1fr 1fr', marginBottom: 0 }}>
@@ -126,7 +153,7 @@ export default function Settings() {
               className={theme === 'light' ? 'active' : ''}
               onClick={() => setTheme('light')}
             >
-              ☀️ Claro
+              <Sun size={17} /> Claro
             </button>
             <button
               type="button"
@@ -134,14 +161,14 @@ export default function Settings() {
               className={theme === 'dark' ? 'active' : ''}
               onClick={() => setTheme('dark')}
             >
-              🌙 Escuro
+              <Moon size={16} /> Escuro
             </button>
           </div>
         </div>
       </div>
 
       <button className="btn secondary mt-16" style={{ color: 'var(--expense)' }} onClick={logout}>
-        Sair da conta
+        <LogOut size={17} /> Sair da conta
       </button>
 
       <p className="center muted mt-16" style={{ fontSize: '0.75rem' }}>

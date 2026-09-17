@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Register() {
   const { register } = useAuth()
+  const navigate = useNavigate()
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -32,6 +33,7 @@ export default function Register() {
           ? parseFloat(String(form.monthly_income).replace(',', '.'))
           : 0,
       })
+      navigate('/gastos-fixos?onboarding=1', { replace: true })
     } catch (err) {
       setError(err.message || 'Não foi possível criar a conta.')
       setLoading(false)
@@ -41,7 +43,7 @@ export default function Register() {
   return (
     <div className="auth-wrap">
       <div className="auth-logo">
-        <div className="emoji">💰</div>
+        <div className="brand-badge">💰</div>
         <h1>Criar conta</h1>
         <p>Comece a organizar sua vida financeira hoje.</p>
       </div>

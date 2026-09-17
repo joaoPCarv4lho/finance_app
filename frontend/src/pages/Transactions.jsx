@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
+import { Trash2, Receipt } from 'lucide-react'
 import { api } from '../api/client'
 import { formatCurrency, formatDate, TYPE_LABELS } from '../utils/format'
 
@@ -54,8 +55,8 @@ export default function Transactions() {
       {loading ? (
         <div className="spinner" />
       ) : items.length === 0 ? (
-        <div className="card empty">
-          <span className="emoji">🧾</span>
+        <div className="card empty mt-16">
+          <div className="empty-ic"><Receipt size={26} /></div>
           Nenhum lançamento {filter ? `de ${TYPE_LABELS[filter].toLowerCase()}` : ''} por aqui.
         </div>
       ) : (
@@ -69,16 +70,16 @@ export default function Transactions() {
                   {t.category?.name || '—'} · {formatDate(t.transaction_date)}
                 </div>
               </div>
-              <div className={`tx-amount ${t.type}`}>
+              <div className={`tx-amount ${t.type} tnum`}>
                 {SIGN[t.type]} {formatCurrency(t.amount)}
               </div>
               <button
                 className="icon-btn"
-                style={{ width: 34, height: 34, boxShadow: 'none', color: 'var(--text-muted)' }}
+                style={{ width: 34, height: 34, border: 'none', color: 'var(--text-muted)' }}
                 onClick={() => remove(t.id)}
                 aria-label="Excluir"
               >
-                🗑️
+                <Trash2 size={17} />
               </button>
             </div>
           ))}

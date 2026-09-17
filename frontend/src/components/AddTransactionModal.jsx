@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
+import { TrendingUp, TrendingDown, LineChart } from 'lucide-react'
 import { api } from '../api/client'
 import { TYPE_LABELS } from '../utils/format'
 import Modal from './Modal.jsx'
 
-const TYPE_ICONS = { INCOME: '⬆️', EXPENSE: '⬇️', INVESTMENT: '📈' }
+const TYPE_ICONS = {
+  INCOME: TrendingUp,
+  EXPENSE: TrendingDown,
+  INVESTMENT: LineChart,
+}
 const today = () => new Date().toISOString().slice(0, 10)
 
 export default function AddTransactionModal({ onClose, onSuccess }) {
@@ -61,18 +66,21 @@ export default function AddTransactionModal({ onClose, onSuccess }) {
     <Modal title="Novo lançamento" onClose={onClose}>
       <form onSubmit={submit}>
         <div className="type-toggle">
-          {['INCOME', 'EXPENSE', 'INVESTMENT'].map((t) => (
-            <button
-              type="button"
-              key={t}
-              data-type={t}
-              className={type === t ? 'active' : ''}
-              onClick={() => setType(t)}
-            >
-              <span style={{ fontSize: '1.2rem' }}>{TYPE_ICONS[t]}</span>
-              {TYPE_LABELS[t]}
-            </button>
-          ))}
+          {['INCOME', 'EXPENSE', 'INVESTMENT'].map((t) => {
+            const Icon = TYPE_ICONS[t]
+            return (
+              <button
+                type="button"
+                key={t}
+                data-type={t}
+                className={type === t ? 'active' : ''}
+                onClick={() => setType(t)}
+              >
+                <Icon size={20} />
+                {TYPE_LABELS[t]}
+              </button>
+            )
+          })}
         </div>
 
         {error && <div className="alert">{error}</div>}

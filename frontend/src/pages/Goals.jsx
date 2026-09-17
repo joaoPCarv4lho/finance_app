@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { Plus, PiggyBank, Trash2, Target, Trophy } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import ProgressBar from '../components/ProgressBar.jsx'
 import Modal from '../components/Modal.jsx'
+import { burstConfetti } from '../utils/confetti'
 import { formatCurrency, formatDate } from '../utils/format'
 
 function CreateGoalModal({ onClose, onSaved }) {
@@ -79,7 +82,11 @@ function ContributeModal({ goal, onClose, onSaved }) {
     }
     setSaving(true)
     try {
-      await api.contributeGoal(goal.id, value)
+      const updated = await api.contributeGoal(goal.id, value)
+      // Celebrate the moment a goal is reached.
+      if (updated?.is_completed && !goal.is_completed) {
+        burstConfetti()
+      }
       onSaved()
       onClose()
     } catch (err) {
@@ -134,14 +141,14 @@ export default function Goals() {
   return (
     <>
       <button className="btn" style={{ marginTop: 8 }} onClick={() => setShowCreate(true)}>
-        + Nova meta
+        <Plus size={18} /> Nova meta
       </button>
 
       {loading ? (
         <div className="spinner" />
       ) : goals.length === 0 ? (
         <div className="card empty mt-16">
-          <span className="emoji">🎯</span>
+          <div className="empty-ic"><Target size={26} /></div>
           Você ainda não tem metas.
           <br />
           Comece pela <strong>Reserva de Emergência</strong> — o primeiro passo para investir!
@@ -149,36 +156,55 @@ export default function Goals() {
       ) : (
         <div className="mt-16">
           {goals.map((g) => (
-            <div className="card goal-card" key={g.id}>
+            <div className={`card goal-card${g.is_completed ? ' complete' : ''}`} key={g.id}>
               <div className="goal-head">
                 <span className="goal-name">{g.name}</span>
                 {g.is_completed ? (
-                  <span className="goal-done-badge">Concluída ✓</span>
+                  <span className="goal-done-badge">
+                    <Trophy size={13} /> Concluída
+                  </span>
                 ) : (
-                  <span className="goal-pct">{g.progress_percent}%</span>
+                  <span className="goal-pct tnum">{g.progress_percent}%</span>
                 )}
               </div>
               <ProgressBar percent={g.progress_percent} />
               <div className="goal-amounts">
-                <span>{formatCurrency(g.current_amount)}</span>
-                <span>Meta: {formatCurrency(g.target_amount)}</span>
+                <span className="tnum">{formatCurrency(g.current_amount)}</span>
+                <span className="tnum">Meta: {formatCurrency(g.target_amount)}</span>
               </div>
               {!g.is_completed && (
                 <div className="goal-amounts" style={{ marginTop: 2 }}>
-                  <span>Faltam {formatCurrency(g.remaining_amount)}</span>
+                  <span className="tnum">Faltam {formatCurrency(g.remaining_amount)}</span>
                   {g.target_date && <span>até {formatDate(g.target_date)}</span>}
                 </div>
               )}
+              {!g.is_completed && g.target_date && g.monthly_amount_needed != null && (
+                <>
+                  <div className="goal-amounts" style={{ marginTop: 6 }}>
+                    <span className="tnum">
+                      Guarde {formatCurrency(g.monthly_amount_needed)}/mês até {formatDate(g.target_date)}
+                    </span>
+                  </div>
+                  {g.is_feasible === false && (
+                    <div className="alert mt-16" style={{ marginBottom: 0 }}>
+                      Faltam {formatCurrency(g.savings_shortfall)}/mês para isso ser
+                      viável com sua renda disponível atual. Considere ajustar o prazo
+                      ou reduzir gastos fixos em{' '}
+                      <Link to="/gastos-fixos">Gastos Fixos</Link>.
+                    </div>
+                  )}
+                </>
+              )}
               <div className="row-between mt-16" style={{ gap: 8 }}>
                 <button className="btn small" onClick={() => setContributeGoal(g)}>
-                  💰 Guardar
+                  <PiggyBank size={16} /> Guardar
                 </button>
                 <button
                   className="btn small secondary"
                   style={{ color: 'var(--expense)' }}
                   onClick={() => remove(g)}
                 >
-                  Excluir
+                  <Trash2 size={15} /> Excluir
                 </button>
               </div>
             </div>

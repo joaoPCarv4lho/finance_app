@@ -44,3 +44,6 @@ class User(Base):
     categories: Mapped[list["Category"]] = relationship(  # noqa: F821
         back_populates="user", cascade="all, delete-orphan"
     )
+    fixed_expenses: Mapped[list["FixedExpense"]] = relationship(  # noqa: F821
+        back_populates="user", cascade="all, delete-orphan"
+    )

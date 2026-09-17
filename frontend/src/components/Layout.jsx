@@ -1,20 +1,22 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Home, Receipt, Target, User, Plus, Sun, Moon } from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import AddTransactionModal from './AddTransactionModal.jsx'
 
 const NAV = [
-  { to: '/', label: 'Início', icon: '🏠' },
-  { to: '/transactions', label: 'Extrato', icon: '📋' },
-  { to: '/goals', label: 'Metas', icon: '🎯' },
-  { to: '/settings', label: 'Perfil', icon: '👤' },
+  { to: '/', label: 'Início', Icon: Home },
+  { to: '/transactions', label: 'Extrato', Icon: Receipt },
+  { to: '/goals', label: 'Metas', Icon: Target },
+  { to: '/settings', label: 'Perfil', Icon: User },
 ]
 
 const TITLES = {
   '/': null,
   '/transactions': 'Extrato',
   '/goals': 'Minhas Metas',
+  '/gastos-fixos': 'Gastos Fixos',
   '/settings': 'Perfil',
 }
 
@@ -45,7 +47,7 @@ export default function Layout() {
           aria-label={theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'}
           title="Alternar tema"
         >
-          {theme === 'dark' ? '☀️' : '🌙'}
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
       </header>
 
@@ -61,13 +63,13 @@ export default function Layout() {
             end={n.to === '/'}
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
           >
-            <span className="nav-icon">{n.icon}</span>
+            <span className="nav-icon"><n.Icon size={23} /></span>
             {n.label}
           </NavLink>
         ))}
 
         <button className="nav-item add" onClick={() => setShowAdd(true)}>
-          <span className="nav-icon">+</span>
+          <span className="nav-icon"><Plus size={26} /></span>
           Lançar
         </button>
 
@@ -77,7 +79,7 @@ export default function Layout() {
             to={n.to}
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
           >
-            <span className="nav-icon">{n.icon}</span>
+            <span className="nav-icon"><n.Icon size={23} /></span>
             {n.label}
           </NavLink>
         ))}
