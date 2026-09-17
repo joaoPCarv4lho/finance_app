@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Wallet,
   Palette,
@@ -124,6 +125,22 @@ export default function Settings() {
           {saving ? 'Salvando...' : 'Salvar'}
         </button>
       </form>
+
+      <div className="card mt-16">
+        <div className="row-between">
+          <div>
+            <h2 className="card-title" style={{ marginBottom: 2 }}>
+              <Wallet size={18} /> Gastos fixos
+            </h2>
+            <div className="muted" style={{ fontSize: '0.85rem' }}>
+              Aluguel, internet, streaming e outras contas mensais.
+            </div>
+          </div>
+          <Link className="btn small secondary" to="/gastos-fixos">
+            Gerenciar
+          </Link>
+        </div>
+      </div>
 
       <div className="card mt-16">
         <h2 className="card-title"><Palette size={18} /> Aparência</h2>
