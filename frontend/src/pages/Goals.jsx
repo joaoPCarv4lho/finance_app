@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, PiggyBank, Trash2, Target, Trophy } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import ProgressBar from '../components/ProgressBar.jsx'
 import Modal from '../components/Modal.jsx'
@@ -176,6 +177,23 @@ export default function Goals() {
                   <span className="tnum">Faltam {formatCurrency(g.remaining_amount)}</span>
                   {g.target_date && <span>até {formatDate(g.target_date)}</span>}
                 </div>
+              )}
+              {!g.is_completed && g.target_date && g.monthly_amount_needed != null && (
+                <>
+                  <div className="goal-amounts" style={{ marginTop: 6 }}>
+                    <span className="tnum">
+                      Guarde {formatCurrency(g.monthly_amount_needed)}/mês até {formatDate(g.target_date)}
+                    </span>
+                  </div>
+                  {g.is_feasible === false && (
+                    <div className="alert mt-16" style={{ marginBottom: 0 }}>
+                      Faltam {formatCurrency(g.savings_shortfall)}/mês para isso ser
+                      viável com sua renda disponível atual. Considere ajustar o prazo
+                      ou reduzir gastos fixos em{' '}
+                      <Link to="/gastos-fixos">Gastos Fixos</Link>.
+                    </div>
+                  )}
+                </>
               )}
               <div className="row-between mt-16" style={{ gap: 8 }}>
                 <button className="btn small" onClick={() => setContributeGoal(g)}>
