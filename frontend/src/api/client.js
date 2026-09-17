@@ -101,6 +101,15 @@ export const api = {
     request(`/goals/${id}/contribute`, { method: 'POST', body: { amount } }),
   deleteGoal: (id) => request(`/goals/${id}`, { method: 'DELETE' }),
 
+  // Fixed expenses
+  getFixedExpenses: () => request('/fixed-expenses'),
+  createFixedExpense: (payload) =>
+    request('/fixed-expenses', { method: 'POST', body: payload }),
+  updateFixedExpense: (id, payload) =>
+    request(`/fixed-expenses/${id}`, { method: 'PATCH', body: payload }),
+  deleteFixedExpense: (id) =>
+    request(`/fixed-expenses/${id}`, { method: 'DELETE' }),
+
   // Dashboard
   getDashboard: (params = {}) => {
     const q = new URLSearchParams(
