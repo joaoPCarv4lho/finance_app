@@ -4,6 +4,9 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field
 
+from app.models.goal import Goal
+from app.services.goal_planning import compute_savings_plan
+
 
 class GoalCreate(BaseModel):
     name: str = Field(min_length=1, max_length=100)
@@ -37,6 +40,12 @@ class GoalOut(BaseModel):
     is_completed: bool
     created_at: datetime
 
+    disposable_income: Decimal = Decimal("0")
+    monthly_amount_needed: Decimal | None = None
+    months_remaining: int | None = None
+    is_feasible: bool | None = None
+    savings_shortfall: Decimal | None = None
+
     @computed_field
     @property
     def progress_percent(self) -> float:
@@ -51,3 +60,24 @@ class GoalOut(BaseModel):
     def remaining_amount(self) -> Decimal:
         remaining = self.target_amount - self.current_amount
         return remaining if remaining > 0 else Decimal("0")
+
+    @classmethod
+    def from_goal(cls, goal: Goal, disposable_income: Decimal) -> "GoalOut":
+        """Build a GoalOut with the savings plan computed from disposable_income."""
+        plan = compute_savings_plan(
+            target_amount=Decimal(goal.target_amount),
+            current_amount=Decimal(goal.current_amount),
+            target_date=goal.target_date,
+            is_completed=goal.is_completed,
+            disposable_income=disposable_income,
+        )
+        out = cls.model_validate(goal)
+        return out.model_copy(
+            update={
+                "disposable_income": disposable_income,
+                "monthly_amount_needed": plan.monthly_amount_needed,
+                "months_remaining": plan.months_remaining,
+                "is_feasible": plan.is_feasible,
+                "savings_shortfall": plan.savings_shortfall,
+            }
+        )
