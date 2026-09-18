@@ -14,6 +14,7 @@ import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import { formatCurrency } from '../utils/format'
+import InstallAppCard from '../components/InstallAppCard.jsx'
 
 export default function Settings() {
   const { user, logout, setUser } = useAuth()
@@ -166,6 +167,8 @@ export default function Settings() {
           </div>
         </div>
       </div>
+
+      <InstallAppCard />
 
       <button className="btn secondary mt-16" style={{ color: 'var(--expense)' }} onClick={logout}>
         <LogOut size={17} /> Sair da conta
