@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Sem cache/funcionamento offline — o service worker não intercepta nem cacheia nada (spec, seção "Arquitetura", item 2).
-- `theme_color`/`background_color` do manifest devem usar o verde já estabelecido no app: `#059669` (já é o `theme-color` em `frontend/index.html`).
+- `theme_color` do manifest deve usar o verde já estabelecido no app: `#059669` (já é o `theme-color` em `frontend/index.html`). `background_color` é intencionalmente `#ffffff` (branco) — usado só na splash screen do Android durante o carregamento, e o app em si é claro por padrão; um verde ali ficaria pior que branco. (Nota adicionada após a revisão final encontrar essa linha contradizendo o Step 4 da Task 1, que já usava `#ffffff` desde o início — a Task 1 estava certa, esta linha é que estava redigida errado.)
 - O card `InstallAppCard` não deve renderizar nada (`return null`) quando não há nada acionável a oferecer (app já instalado, ou navegador sem suporte a nenhum dos dois caminhos) — spec, seção "UI".
 - Ícones gerados programaticamente (não depender de fonte de emoji do sistema) — spec, seção "Ícones".
 
