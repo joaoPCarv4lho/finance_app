@@ -277,7 +277,7 @@ ou
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-Guarde o valor gerado — vai ser colado na variável de ambiente no próximo passo.
+Guarde o valor gerado — vai ser colado na variável de ambiente no próximo passo. 
 
 - [ ] **Step 2: Configurar as variáveis de ambiente do `backend`**
 
@@ -297,7 +297,7 @@ Aba **Settings** → **Deploy** → **Healthcheck Path** → `/health`.
 
 Aba **Settings** → **Networking** → **Generate Domain**.
 
-Expected: uma URL pública é gerada (ex: `https://backend-production-xxxx.up.railway.app`). Anote-a — vai ser usada nas Tasks 5 e 6.
+Expected: uma URL pública é gerada (ex: `https://backend-production-xxxx.up.railway.app`). Anote-a — vai ser usada nas Tasks 5 e 6. financeapp-production-6d.up.railway.app
 
 - [ ] **Step 5: Confirmar o deploy**
 
@@ -347,7 +347,7 @@ O Nixpacks detecta automaticamente o script `start` de `frontend/package.json` (
 
 Aba **Settings** → **Networking** → **Generate Domain**.
 
-Expected: uma URL pública é gerada (ex: `https://frontend-production-xxxx.up.railway.app`). Anote-a.
+Expected: uma URL pública é gerada (ex: `https://frontend-production-xxxx.up.railway.app`). Anote-a. frontend-production-e873.up.railway.app
 
 - [ ] **Step 6: Confirmar o deploy**
 
