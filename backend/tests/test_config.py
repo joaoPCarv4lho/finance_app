@@ -22,6 +22,18 @@ from app.core.config import Settings
             "sqlite+aiosqlite:///./finance_app.db",
             "sqlite+aiosqlite:///./finance_app.db",
         ),
+        (
+            "postgresql://user:pass@host:5432/db?sslmode=require",
+            "postgresql+asyncpg://user:pass@host:5432/db",
+        ),
+        (
+            "postgres://user:pass@host:5432/db?sslmode=require",
+            "postgresql+asyncpg://user:pass@host:5432/db",
+        ),
+        (
+            "postgres://user:pass@host:5432/db?application_name=finance-app",
+            "postgresql+asyncpg://user:pass@host:5432/db?application_name=finance-app",
+        ),
     ],
 )
 def test_database_url_normalizes_to_asyncpg_driver(raw_url, expected_url):

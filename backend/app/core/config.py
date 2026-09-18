@@ -2,6 +2,7 @@ from functools import lru_cache
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy.engine import make_url
 
 
 class Settings(BaseSettings):
@@ -23,12 +24,26 @@ class Settings(BaseSettings):
     @classmethod
     def normalize_database_url(cls, v: str) -> str:
         # Railway expõe o Postgres gerenciado como postgres(ql)://, mas o
-        # SQLAlchemy async engine exige o driver asyncpg explícito.
-        if v.startswith("postgres://"):
-            return "postgresql+asyncpg://" + v[len("postgres://"):]
-        if v.startswith("postgresql://"):
-            return "postgresql+asyncpg://" + v[len("postgresql://"):]
-        return v
+        # SQLAlchemy async engine exige o driver asyncpg explícito. Também
+        # removemos "sslmode" da query string (ex.: quando a URL vem de
+        # DATABASE_PUBLIC_URL), pois o asyncpg não aceita esse parâmetro
+        # estilo libpq — ele usa "ssl" em vez disso.
+        v = v.strip()
+        url = make_url(v)
+
+        driver_needs_rewrite = url.drivername.lower() in ("postgres", "postgresql")
+        has_sslmode = "sslmode" in url.query
+
+        if not driver_needs_rewrite and not has_sslmode:
+            return v
+
+        if driver_needs_rewrite:
+            url = url.set(drivername="postgresql+asyncpg")
+        if has_sslmode:
+            query = {k: val for k, val in url.query.items() if k != "sslmode"}
+            url = url.set(query=query)
+
+        return url.render_as_string(hide_password=False)
 
     # Security / JWT
     SECRET_KEY: str = "change-me-in-production-please-use-a-long-random-string"
