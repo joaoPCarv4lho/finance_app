@@ -1,54 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+import { getSnapshot, subscribe, promptInstall } from './installPromptStore'
 
-function isStandalone() {
+function isIOSDevice() {
+  const ua = window.navigator.userAgent
   return (
-    window.matchMedia?.('(display-mode: standalone)')?.matches ||
-    window.navigator.standalone === true
+    /iphone|ipad|ipod/i.test(ua) ||
+    (/macintosh/i.test(ua) && window.navigator.maxTouchPoints > 1)
   )
 }
 
-function isIOSDevice() {
-  return /iphone|ipad|ipod/i.test(window.navigator.userAgent)
-}
-
 /**
- * Expõe se/como o app pode ser instalado neste dispositivo:
+ * Exposes se/como o app pode ser instalado neste dispositivo:
  * - `canInstall: true` + `promptInstall()` no Chrome/Edge (prompt nativo)
- * - `isIOS: true` no Safari do iOS (sem API de prompt nativo; quem chama
- *   o hook deve mostrar instruções manuais)
+ * - `isIOS: true` no Safari do iOS/iPadOS (sem API de prompt nativo; quem
+ *   chama o hook deve mostrar instruções manuais)
  * - ambos `false` quando o app já está instalado ou a plataforma não
  *   oferece nenhum caminho de instalação
+ *
+ * A captura do evento beforeinstallprompt vive em `installPromptStore.js`
+ * (singleton de módulo, importado uma vez em main.jsx), não neste hook —
+ * assim nenhum componente precisa estar montado para o evento ser
+ * capturado.
  */
 export function useInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState(null)
-  const [installed, setInstalled] = useState(isStandalone())
-
-  useEffect(() => {
-    if (installed) return
-
-    function onBeforeInstallPrompt(e) {
-      e.preventDefault()
-      setDeferredPrompt(e)
-    }
-    function onAppInstalled() {
-      setInstalled(true)
-      setDeferredPrompt(null)
-    }
-
-    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
-    window.addEventListener('appinstalled', onAppInstalled)
-    return () => {
-      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt)
-      window.removeEventListener('appinstalled', onAppInstalled)
-    }
-  }, [installed])
-
-  async function promptInstall() {
-    if (!deferredPrompt) return
-    deferredPrompt.prompt()
-    await deferredPrompt.userChoice
-    setDeferredPrompt(null)
-  }
+  const { deferredPrompt, installed } = useSyncExternalStore(subscribe, getSnapshot)
 
   return {
     canInstall: !installed && deferredPrompt !== null,
