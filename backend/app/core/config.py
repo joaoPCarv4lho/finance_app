@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +18,17 @@ class Settings(BaseSettings):
     # Database. Defaults to a local SQLite file so the app runs without extra
     # infrastructure; docker-compose overrides this with PostgreSQL.
     DATABASE_URL: str = "sqlite+aiosqlite:///./finance_app.db"
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def normalize_database_url(cls, v: str) -> str:
+        # Railway expõe o Postgres gerenciado como postgres(ql)://, mas o
+        # SQLAlchemy async engine exige o driver asyncpg explícito.
+        if v.startswith("postgres://"):
+            return "postgresql+asyncpg://" + v[len("postgres://"):]
+        if v.startswith("postgresql://"):
+            return "postgresql+asyncpg://" + v[len("postgresql://"):]
+        return v
 
     # Security / JWT
     SECRET_KEY: str = "change-me-in-production-please-use-a-long-random-string"
